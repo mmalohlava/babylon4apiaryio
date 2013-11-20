@@ -1,17 +1,49 @@
 FORMAT: X-1A
-HOST: http://www.google.com/
+HOST: http://0xdata.com/
 
 # H2O REST API
 Documentation of H2O REST API.
 
-## Inspect [/Inspect{?id,name}]
+## First class entities (resources)
+
+H2O provides three 
+  - Frame
+  - Job
+  - Model
+
+## Inspect a resource [/v2/inspect.json{?src,offset,limit,cols}]
 The following section describes Inspect REST call.
 
 + Parameters
-  + id (number) ... unique identifier
-  + name (string) ... name of frame
+  + src (string,required) ... name of H2O resource
+  + offset (number,optional) ... offset of the first required row
+  + limit (number,optional) ... number of rows to retrieve
+  + cols (string,optional) ... columns selector
 
 ### Retrieve [GET]
 + Response 200 (application/json)
 
-        { "message": "All your base are belong to us." }
+        { "src" : "iris_train.hex",
+          "type" : "frame",
+          "offset" : 0,
+          "limit"  : 100,
+          "nrows"  : 150,
+          "ncols"  : 5,
+          "rows"   : 3,
+        }
+        
+## Inspect a java [/v2/inspect.java{?src}]
+Retrieve a H2O resource as a Java program.
+
++ Parameters
+   + src (string,required) ... name of H2O resource
+   
+### Retrieve [GET]
++ Response 200 (plain/text)
+
+        class Iris {
+        }
+
+
+        
+  
