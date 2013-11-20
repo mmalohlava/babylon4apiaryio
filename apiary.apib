@@ -11,6 +11,23 @@ H2O provides three
   - Job
   - Model
 
+## List available resources [/v2/storeview.json]
+
+### Retrieve [GET]
++ Response 200 (application/json)
+
+        { "resources" : [ {
+                "type": "model",
+                "name": "gbm_model",
+                "uri": "..."
+            }, {
+                "type": "frame",
+                "name": "iris_train.hex",
+                "uri":  "..."
+            }
+          ]
+        }
+
 ## Inspect a resource [/v2/inspect.json{?src,offset,limit,cols}]
 The following section describes Inspect REST call.
 
