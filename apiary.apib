@@ -16,12 +16,14 @@ Here is a link for iris dataset used in example below.
 ## List files from given datasource [/v2/list_uri.json{?uri,exclude_filter,exclude_list}]
 The call for given URI returns a list of files which are accessible.
 The call also returns the files which were skipped (skipped by default, skipped because lack of READ permission,
-skipped because of exclude_filter .
+skipped because of exclude filter or exclude list).
+
+Note: client can filter the list by itself.
 
 + Parameters
   + uri (string,required) ... uri of data source
-  + exclude_filter (string, optional) ... exclude files by regexp
-  + exclude_list (string, optional) ... explicit list of excluded files (h2o can put into the list some of files by default)
+  + exclude_filter = `` (string, optional) ... exclude files by regexp (Java regexp style)
+  + exclude_list = `` (string, optional) ... explicit list of excluded files (h2o can put into the list some of files by default)
 
 ### Retrieve a list of resources at given URI [GET]
 + Response 200 (application/json)
@@ -56,27 +58,26 @@ curl --include -F file=iris.csv -F filedata=@iris.csv http://h2o/v2/post_file.js
             "dst" : "iris.csv"
         }
 
-## Parse preview [/v2/parse_preview.json?{list,parser_type,data_separator,header,header_separator,column_types}]
+## Parse preview [/v2/parse_preview.json?{files,parser_type,data_separator,header,header_separator,column_types,skip_header,preview_len}]
 The call returns a guessed parser config. The client can explicitly enforce selected parameters/behavior.
 
-_Note_: we should probably call preview by POST since the request can be huge!
-
-_Note_: we can post parameters as a JSON structure
-
-
 + Parameters
-  + list (string,required) ... list of files to be parsed
-  + parser_type (string,optional) ... required data parser (CSV,SVMLight,XLS). 
-  + separator (string,optional) ... data separator.
+  + files (string,required) ... list of file URIs to be parsed.
+  + parser_type = `AUTO` (string,optional) ... required data parser (CSV,SVMLight,XLS, AUTO). 
+  + separator = `,` (string,optional) ... data separator.
   + header (string, optional) ... list of column names
   + header_separator (string, optional) ... header separator
   + column_types (string, optional) ... list of column types.
+  + skip_header = `False` (boolean,optional) ... explicitly skip header guessing
+  + preview_len = `10` (integer,optional) ... length
 
-### Retrieve a parse preview [GET]
+### Retrieve a parse preview [POST]
 + Response 200 (application/json)
 
         {
-            "columns"       : [ 
+            "files"         : [ "iris.csv" ],
+            "columns"       : 
+                [ 
                     {
                         "header" : "sepal_len",
                         "type"   : "DOUBLE"
@@ -100,6 +101,7 @@ _Note_: we can post parameters as a JSON structure
             "parser_type"   : "CSV",
             "header_separator" : ",",
             "data_separator"   : ",",
+            "preview_len"      : 10,
             "preview"          : [ 
                                     [5.1,3.5,1.4,0.2,"Iris-setosa"],
                                     [4.9,3.0,1.4,0.2,"Iris-setosa"],
@@ -118,7 +120,7 @@ _Note_: we can post parameters as a JSON structure
 The call return a header stored in given file reflecting the separator.
 
 + Parameters
-  + uri (string,required) ... file containing a header
+  + uri (string,required) ... h2o reference (i.e., key) containing a header
   + header_separator (string,optional) ... separator separating header
 
 ### Retrieve a header stored at given URI [GET]
