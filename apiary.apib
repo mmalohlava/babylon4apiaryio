@@ -150,7 +150,7 @@ The call return a header stored in given file reflecting the separator.
             "job" : "$0301c0a8013132d4ffffffff$_b1aa57792163146ec3393de65f2b4a6a"
         }
         
-## Monitor parse progress [/v2/parse_progress.json?{job}]
+## Monitor parse progress [/v2/parse_progress.json{?job}]
 
 + Parameters
   + job (string,required) ... job id returned by parse call
@@ -168,6 +168,19 @@ The call return a header stored in given file reflecting the separator.
                         }       
         }
 
+## Cancel a job [/v2/cancel_job.json{?job}]
+Cancel given job. 
+
+*This should be part of jobs api as DELETE method*
+
++ Parameters
+  + job (required,string) ... job identification
+  
+### Cancel the job [GET]
++ Response 200 (application/json)
+
+        {
+        }
 
 ## List available resources [/v2/storeview.json]
 
