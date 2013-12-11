@@ -22,9 +22,33 @@ H2O provides three
 + Response 200 (application/json)
         
         { 
-            "aa" : "a"
+            "files" : [ 
+                "hdfs://192.168.1.161/home-0xdiag-datasets/file_1.dat.gz",
+                "hdfs://192.168.1.161/home-0xdiag-datasets/file_2.dat.gz"
+            ],
+            "exluded_files" : [
+                "hdfs://192.168.1.161/home-0xdiag-datasets/_SUCCESS",
+                "hdfs://192.168.1.161/home-0xdiag-datasets/_FAILED"
+            ]
         }
 
+## Parse preview [/v2/parse_preview.json]
+
++ Parameters
+  + list (string,required) ... list of files
+  + parser_type (string,optional) ... required data parser (CSV,SVMLight,XLS). 
+  + separator (string,optional) ... data separator.
+  + header (string, optional) ... list of column names
+
+### Retrieve [GET]
++ Response 200 (application/json)
+
+        {
+            "parser_type" : "CSV",
+            "separator"   : ",",
+            "header"      : [ "sepal_len","sepal_wid","petal_len","petal_wid","class" ],
+    
+        }
 
 ## List available resources [/v2/storeview.json]
 
