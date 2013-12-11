@@ -6,23 +6,17 @@ Documentation of H2O REST API.
 
 ## List URIs
 
-### Retrieve [GET]
-
 + Parameters
-    + uri
-    
+  + uri (string,required) ... uri of datasource
+  + exclude_filter (string, optional) ... exclude files by regexp
+  + exclude_list (string, optional) ... explicit list of excluded files
+
 ### Retrieve [GET]
++ Response 200 (application/json)
         
-        {
+        { "aa" : []
         }
 
-## Parser setup call
-
-### Retrieve [GET]
-
-        {
-            
-        }
 
 
 ## First class entities (resources)
