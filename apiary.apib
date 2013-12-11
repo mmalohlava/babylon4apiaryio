@@ -37,6 +37,25 @@ skipped because of exclude_filter .
             ]
         }
 
+## Post a file [/v2/post_file.json{?file}]
+The call creates a new primitive value in H2O by uploading a file.
+Returns uri (i.e., H2O destination key) of given resource.
+
+```
+curl --include -F file=iris.csv -F filedata=@iris.csv http://h2o/v2/post_file.json
+```
+
++ Parameters
+  + file (string, required) ... a file to upload
+
+### Post a given file [POST]
++ Response 200 (application/json)
+
+        
+        {
+            "dst" : "iris.csv"
+        }
+
 ## Parse preview [/v2/parse_preview.json?{list,parser_type,data_separator,header,header_separator,column_types}]
 The call returns a guessed parser config. The client can explicitly enforce selected parameters/behavior.
 
