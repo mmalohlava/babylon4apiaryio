@@ -76,10 +76,29 @@ _Note_: we can post parameters as a JSON structure
 + Response 200 (application/json)
 
         {
-            "parser_type"      : "CSV",
-            "header"           : [ "sepal_len","sepal_wid","petal_len","petal_wid","class" ],
+            "columns"       : [ 
+                    {
+                        "header" : "sepal_len",
+                        "type"   : "DOUBLE"
+                    },
+                    {
+                        "header" : "sepal_wid",
+                        "type"   : "DOUBLE"
+                    },
+                    {
+                        "header" : "petal_len",
+                        "type"   : "DOUBLE"
+                    },
+                    {
+                        "header" : "petal_wid",
+                        "type"   : "DOUBLE"
+                    },
+                    {
+                        "header" : "class",
+                        "type"   : "ENUM"
+                    }],
+            "parser_type"   : "CSV",
             "header_separator" : ",",
-            "column_types"     : [ "DOUBLE", "DOUBLE", "DOUBLE", "DOUBLE", "ENUM" ],
             "data_separator"   : ",",
             "preview"          : [ 
                                     [5.1,3.5,1.4,0.2,"Iris-setosa"],
