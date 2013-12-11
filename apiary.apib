@@ -4,27 +4,27 @@ HOST: http://0xdata.com/
 # H2O REST API - parser
 Documentation of H2O REST API.
 
-## List URIs
-
-+ Parameters
-  + uri (string,required) ... uri of datasource
-  + exclude_filter (string, optional) ... exclude files by regexp
-  + exclude_list (string, optional) ... explicit list of excluded files
-
-### Retrieve [GET]
-+ Response 200 (application/json)
-        
-        { "aa" : []
-        }
-
-
-
 ## First class entities (resources)
 
 H2O provides three 
   - Frame
   - Job
   - Model
+
+## List URIs [/v2/list_uri.json{?uri,exclude_filter,exclude_list}]
+
++ Parameters
+  + uri (string,required) ... uri of data source
+  + exclude_filter (string, optional) ... exclude files by regexp
+  + exclude_list (string, optional) ... explicit list of excluded files
+
+### Retrieve [GET]
++ Response 200 (application/json)
+        
+        { 
+            "aa" : "a"
+        }
+
 
 ## List available resources [/v2/storeview.json]
 
