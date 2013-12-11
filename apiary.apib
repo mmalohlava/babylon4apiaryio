@@ -132,10 +132,10 @@ The call return a header stored in given file reflecting the separator.
         }
         
 
-## Parse [/v2/parse.json?{list,parser_type,data_separator,header,header_separator,column_types}]
+## Parse [/v2/parse.json?{files,parser_type,data_separator,header,header_separator,column_types}]
 
 + Parameters
-  + list (string,required) ... list of files to be parsed
+  + files (string,required) ... list of file uris to be parsed 
   + parser_type (string,optional) ... required data parser (CSV,SVMLight,XLS). 
   + separator (string,optional) ... data separator.
   + header (string, optional) ... list of column names
@@ -146,8 +146,28 @@ The call return a header stored in given file reflecting the separator.
 + Response 200 (application/json)
 
         {
-            "dst" : "iris.hex"
+            "dst" : "iris.hex",
+            "job" : "$0301c0a8013132d4ffffffff$_b1aa57792163146ec3393de65f2b4a6a"
         }
+        
+## Monitor parse progress [/v2/parse_progress.json?{job}]
+
++ Parameters
+  + job (string,required) ... job id returned by parse call
+
+### Monitor parse progress [GET]
++ Response 200 (application/json)
+
+        {
+            "progress" : 0.43,
+            "job"      : "$0301c0a8013132d4ffffffff$_b1aa57792163146ec3393de65f2b4a60",
+            "errors"   : [ { 
+                                "file": "iris.csv",
+                                "msg" : "The file contains unknown characters"
+                            }
+                        }       
+        }
+
 
 ## List available resources [/v2/storeview.json]
 
@@ -165,6 +185,7 @@ The call return a header stored in given file reflecting the separator.
             }
           ]
         }
+
 
 ## Inspect a resource [/v2/inspect.json{?src,offset,limit,cols}]
 The following section describes Inspect REST call.
