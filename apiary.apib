@@ -1,7 +1,7 @@
 FORMAT: X-1A
 HOST: http://0xdata.com/
 
-# H2O REST API - parser
+# H2O REST API
 Documentation of H2O REST API.
 
 ## First class entities (resources)
@@ -10,13 +10,18 @@ H2O provides three
   - Frame
   - Job
   - Model
+  
+Here is a link for iris dataset used in example below.
 
 ## List URIs [/v2/list_uri.json{?uri,exclude_filter,exclude_list}]
+The call for given URI returns a list of files which are accessible.
+The call also returns the files which were skipped (skipped by default, skipped because lack of READ permission,
+skipped because of exclude_filter .
 
 + Parameters
   + uri (string,required) ... uri of data source
   + exclude_filter (string, optional) ... exclude files by regexp
-  + exclude_list (string, optional) ... explicit list of excluded files
+  + exclude_list (string, optional) ... explicit list of excluded files (h2o can put into the list some of files by default)
 
 ### Retrieve [GET]
 + Response 200 (application/json)
@@ -32,22 +37,42 @@ H2O provides three
             ]
         }
 
-## Parse preview [/v2/parse_preview.json]
+## Parse preview [/v2/parse_preview.json?{list,parser_type,data_separator,header,header_separator,column_types}]
+The call returns a guessed parser config.
+
+_Note_: we should probably call preview by POST since it can be huge!
+
+_Note_: we can post parameters as JSON structure
+
 
 + Parameters
   + list (string,required) ... list of files
   + parser_type (string,optional) ... required data parser (CSV,SVMLight,XLS). 
   + separator (string,optional) ... data separator.
   + header (string, optional) ... list of column names
+  + header_separator (string, optional) ... header separator
+  + column_types (string, optional) ... list of column types.
 
 ### Retrieve [GET]
 + Response 200 (application/json)
 
         {
-            "parser_type" : "CSV",
-            "separator"   : ",",
-            "header"      : [ "sepal_len","sepal_wid","petal_len","petal_wid","class" ],
-    
+            "parser_type"      : "CSV",
+            "header"           : [ "sepal_len","sepal_wid","petal_len","petal_wid","class" ],
+            "header_separator" : ",",
+            "column_types"     : [ "DOUBLE", "DOUBLE", "DOUBLE", "DOUBLE", "ENUM" ],
+            "data_separator"   : ",",
+            "preview"          : [ 
+                                    [ 5.1,3.5,1.4,0.2,"Iris-setosa"],
+                                    [4.9,3.0,1.4,0.2,"Iris-setosa"],
+                                    [4.7,3.2,1.3,0.2,"Iris-setosa"],
+                                    [4.6,3.1,1.5,0.2,"Iris-setosa"],
+                                    [5.0,3.6,1.4,0.2,"Iris-setosa"],
+                                    [5.4,3.9,1.7,0.4,"Iris-setosa"],
+                                    [4.6,3.4,1.4,0.3,"Iris-setosa"],
+                                    [5.0,3.4,1.5,0.2,"Iris-setosa"],
+                                    [4.4,2.9,1.4,0.2,"Iris-setosa"]
+                                ]
         }
 
 ## List available resources [/v2/storeview.json]
