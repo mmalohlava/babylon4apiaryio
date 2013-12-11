@@ -13,7 +13,7 @@ H2O provides three
   
 Here is a link for iris dataset used in example below.
 
-## List URIs [/v2/list_uri.json{?uri,exclude_filter,exclude_list}]
+## List files from given datasource [/v2/list_uri.json{?uri,exclude_filter,exclude_list}]
 The call for given URI returns a list of files which are accessible.
 The call also returns the files which were skipped (skipped by default, skipped because lack of READ permission,
 skipped because of exclude_filter .
@@ -38,15 +38,15 @@ skipped because of exclude_filter .
         }
 
 ## Parse preview [/v2/parse_preview.json?{list,parser_type,data_separator,header,header_separator,column_types}]
-The call returns a guessed parser config.
+The call returns a guessed parser config. The client can explicitly enforce selected parameters/behavior.
 
-_Note_: we should probably call preview by POST since it can be huge!
+_Note_: we should probably call preview by POST since the request can be huge!
 
-_Note_: we can post parameters as JSON structure
+_Note_: we can post parameters as a JSON structure
 
 
 + Parameters
-  + list (string,required) ... list of files
+  + list (string,required) ... list of files to be parsed
   + parser_type (string,optional) ... required data parser (CSV,SVMLight,XLS). 
   + separator (string,optional) ... data separator.
   + header (string, optional) ... list of column names
@@ -63,7 +63,7 @@ _Note_: we can post parameters as JSON structure
             "column_types"     : [ "DOUBLE", "DOUBLE", "DOUBLE", "DOUBLE", "ENUM" ],
             "data_separator"   : ",",
             "preview"          : [ 
-                                    [ 5.1,3.5,1.4,0.2,"Iris-setosa"],
+                                    [5.1,3.5,1.4,0.2,"Iris-setosa"],
                                     [4.9,3.0,1.4,0.2,"Iris-setosa"],
                                     [4.7,3.2,1.3,0.2,"Iris-setosa"],
                                     [4.6,3.1,1.5,0.2,"Iris-setosa"],
@@ -73,6 +73,40 @@ _Note_: we can post parameters as JSON structure
                                     [5.0,3.4,1.5,0.2,"Iris-setosa"],
                                     [4.4,2.9,1.4,0.2,"Iris-setosa"]
                                 ]
+        }
+        
+        
+## Get header from file [/v2/get_header?{uri,header_separator}]
+The call return a header stored in given file reflecting the separator.
+
++ Parameters
+  + uri (string,required) ... file containing a header
+  + header_separator (string,optional) ... separator separating header
+
+### Retrieve [GET]
++ Response 200 (application/json)
+    
+        { 
+            "header"           : [ "sepal_len","sepal_wid","petal_len","petal_wid","class" ],
+            "header_separator" : ","
+        }
+        
+
+## Parse [/v2/parse.json?{list,parser_type,data_separator,header,header_separator,column_types}]
+
++ Parameters
+  + list (string,required) ... list of files to be parsed
+  + parser_type (string,optional) ... required data parser (CSV,SVMLight,XLS). 
+  + separator (string,optional) ... data separator.
+  + header (string, optional) ... list of column names
+  + header_separator (string, optional) ... header separator
+  + column_types (string, optional) ... list of column types.
+
+### Retrieve [POST]
++ Response 200 (application/json)
+
+        {
+            "dst" : "iris.hex"
         }
 
 ## List available resources [/v2/storeview.json]
