@@ -23,7 +23,7 @@ skipped because of exclude_filter .
   + exclude_filter (string, optional) ... exclude files by regexp
   + exclude_list (string, optional) ... explicit list of excluded files (h2o can put into the list some of files by default)
 
-### Retrieve [GET]
+### Retrieve a list of resources at given URI [GET]
 + Response 200 (application/json)
         
         { 
@@ -53,7 +53,7 @@ _Note_: we can post parameters as a JSON structure
   + header_separator (string, optional) ... header separator
   + column_types (string, optional) ... list of column types.
 
-### Retrieve [GET]
+### Retrieve a parse preview [GET]
 + Response 200 (application/json)
 
         {
@@ -83,7 +83,7 @@ The call return a header stored in given file reflecting the separator.
   + uri (string,required) ... file containing a header
   + header_separator (string,optional) ... separator separating header
 
-### Retrieve [GET]
+### Retrieve a header stored at given URI [GET]
 + Response 200 (application/json)
     
         { 
@@ -102,7 +102,7 @@ The call return a header stored in given file reflecting the separator.
   + header_separator (string, optional) ... header separator
   + column_types (string, optional) ... list of column types.
 
-### Retrieve [POST]
+### Start a parse job [POST]
 + Response 200 (application/json)
 
         {
