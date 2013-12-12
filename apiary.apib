@@ -29,26 +29,26 @@ Note: client can filter the list by itself.
 + Response 200 (application/json)
         
         { 
-            "files" : [ 
+            "uris" : [ 
                 "hdfs://192.168.1.161/home-0xdiag-datasets/file_1.dat.gz",
                 "hdfs://192.168.1.161/home-0xdiag-datasets/file_2.dat.gz"
             ],
-            "ignored_files" : [
+            "ignored_uris" : [
                 "hdfs://192.168.1.161/home-0xdiag-datasets/_SUCCESS",
                 "hdfs://192.168.1.161/home-0xdiag-datasets/_FAILED"
             ]
         }
 
-## Post a file [/v2/post_file.json{?file}]
+## Post a file [/v2/post_file.json{?file,dst}]
 The call creates a new primitive value in H2O by uploading a file.
 Returns uri (i.e., H2O destination key) of given resource.
 
 ```
-curl --include -F file=iris.csv -F filedata=@iris.csv http://h2o/v2/post_file.json
+curl --data-binary @iris.csv http://h2o/v2/post_file.json?dst=iris.csv
 ```
 
 + Parameters
-  + file (string, required) ... a file to upload
+  + dst (string, required) ... destination key
 
 ### Post a given file [POST]
 + Response 200 (application/json)
@@ -57,50 +57,89 @@ curl --include -F file=iris.csv -F filedata=@iris.csv http://h2o/v2/post_file.js
         {
             "dst" : "iris.csv"
         }
++ Response 403 (application/json)
+    
+        {
+            "error_msg" : "Key already in use!",
+            "error_code" : 4141
+        }
 
-## Parse preview [/v2/parse_preview.json?{files,parser_type,data_separator,header,header_separator,column_types,skip_header,preview_len}]
+## Parse preview [/v2/parse_preview.json?{preview_len}]
 The call returns a guessed parser config. The client can explicitly enforce selected parameters/behavior.
 
+```
+    curl --data-binary\
+    '{ "parser_config" : {
+                "uris"         : [ "iris.csv" ],
+                "columns"       : 
+                        [ 
+                        {
+                            
+                            "header" : "sepal_len",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "sepal_wid",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "petal_len",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "petal_wid",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "class",
+                            "type"   : "ENUM"
+                        }],
+                "parser_type"   : "CSV",
+                "header_separator" : ",",
+                "data_separator"   : ",",
+            }
+    }'\
+    http://mmalohlava.apiary.io/v2/parse_preview.json?preview_len=10
+    
+```
+
 + Parameters
-  + files (string,required) ... list of file URIs to be parsed.
-  + parser_type = `AUTO` (string,optional) ... required data parser (CSV,SVMLight,XLS, AUTO). 
-  + separator = `,` (string,optional) ... data separator.
-  + header (string, optional) ... list of column names
-  + header_separator (string, optional) ... header separator
-  + column_types (string, optional) ... list of column types.
-  + skip_header = `False` (boolean,optional) ... explicitly skip header guessing
   + preview_len = `10` (integer,optional) ... length
+
 
 ### Retrieve a parse preview [POST]
 + Response 200 (application/json)
 
         {
-            "files"         : [ "iris.csv" ],
-            "columns"       : 
-                [ 
-                    {
-                        "header" : "sepal_len",
-                        "type"   : "DOUBLE"
-                    },
-                    {
-                        "header" : "sepal_wid",
-                        "type"   : "DOUBLE"
-                    },
-                    {
-                        "header" : "petal_len",
-                        "type"   : "DOUBLE"
-                    },
-                    {
-                        "header" : "petal_wid",
-                        "type"   : "DOUBLE"
-                    },
-                    {
-                        "header" : "class",
-                        "type"   : "ENUM"
-                    }],
-            "parser_type"   : "CSV",
-            "header_separator" : ",",
-            "data_separator"   : ",",
+            "parser_config" : {
+                "uris"         : [ "iris.csv" ],
+                "columns"       : 
+                    [ 
+                        {
+                            "header" : "sepal_len",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "sepal_wid",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "petal_len",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "petal_wid",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "class",
+                            "type"   : "ENUM"
+                        }],
+                "parser_type"   : "CSV",
+                "header_separator" : ",",
+                "data_separator"   : ",",
+                "skip_header"      : False,
+            },
             "preview_len"      : 10,
             "preview"          : [ 
                                     [5.1,3.5,1.4,0.2,"Iris-setosa"],
@@ -132,15 +171,44 @@ The call return a header stored in given file reflecting the separator.
         }
         
 
-## Parse [/v2/parse.json?{files,parser_type,data_separator,header,header_separator,column_types}]
+## Parse [/v2/parse.json]
 
-+ Parameters
-  + files (string,required) ... list of file uris to be parsed 
-  + parser_type (string,optional) ... required data parser (CSV,SVMLight,XLS). 
-  + separator (string,optional) ... data separator.
-  + header (string, optional) ... list of column names
-  + header_separator (string, optional) ... header separator
-  + column_types (string, optional) ... list of column types.
+```
+    curl --data-binary\
+    '{ "parser_config" : {
+                "uris"         : [ "iris.csv" ],
+                "columns"       : 
+                        [ 
+                        {
+                            
+                            "header" : "sepal_len",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "sepal_wid",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "petal_len",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "petal_wid",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "class",
+                            "type"   : "ENUM"
+                        }],
+                "parser_type"   : "CSV",
+                "header_separator" : ",",
+                "data_separator"   : ",",
+            }
+    }'\
+    http://mmalohlava.apiary.io/v2/parse.json
+    
+```
+
 
 ### Start a parse job [POST]
 + Response 200 (application/json)
