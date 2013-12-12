@@ -238,12 +238,13 @@ curl --data-binary @iris.csv http://mmalohlava.apiary.io/v2/get_header.json
 
         {
             "progress" : 0.43,
+            "status"   : "inprogress",
             "job"      : "$0301c0a8013132d4ffffffff$_b1aa57792163146ec3393de65f2b4a60",
             "errors"   : [ { 
                                 "file": "iris.csv",
                                 "msg" : "The file contains unknown characters"
                             }
-                        }       
+                        ]       
         }
 
 ## Cancel a job [/v2/cancel_job.json{?job}]
