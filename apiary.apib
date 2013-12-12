@@ -13,7 +13,7 @@ H2O provides three
   
 Here is a link for iris dataset used in example below.
 
-## List files from given datasource [/v2/list_uri.json{?uri,exclude_filter,exclude_list}]
+## List files from given datasource [/v2/list_uri.json{?uri,include_filter,exclude_files}]
 The call for given URI returns a list of files which are accessible.
 The call also returns the files which were skipped (skipped by default, skipped because lack of READ permission,
 skipped because of exclude filter or exclude list).
@@ -22,8 +22,8 @@ Note: client can filter the list by itself.
 
 + Parameters
   + uri (string,required) ... uri of data source
-  + exclude_filter = `` (string, optional) ... exclude files by regexp (Java regexp style)
-  + exclude_list = `` (string, optional) ... explicit list of excluded files (h2o can put into the list some of files by default)
+  + include_filter = `` (string, optional) ... include files by regexp (basic regexp)
+  + exclude_files = `` (string, optional) ... explicit list of excluded files (h2o can put into the list some of files by default)
 
 ### Retrieve a list of resources at given URI [GET]
 + Response 200 (application/json)
@@ -33,7 +33,7 @@ Note: client can filter the list by itself.
                 "hdfs://192.168.1.161/home-0xdiag-datasets/file_1.dat.gz",
                 "hdfs://192.168.1.161/home-0xdiag-datasets/file_2.dat.gz"
             ],
-            "exluded_files" : [
+            "ignored_files" : [
                 "hdfs://192.168.1.161/home-0xdiag-datasets/_SUCCESS",
                 "hdfs://192.168.1.161/home-0xdiag-datasets/_FAILED"
             ]
