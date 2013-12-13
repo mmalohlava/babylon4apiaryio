@@ -4,6 +4,10 @@ HOST: http://0xdata.com/
 # H2O REST API
 Documentation of H2O REST API.
 
+## General API contracts
+
+  - `dst` key should be optional for all requests. If `dst` key is not specified, H2O derives it (i.e., generate UUID) and returns as a part of response
+
 ## First class entities (resources)
 
 H2O provides three 
@@ -12,6 +16,22 @@ H2O provides three
   - Model
   
 Here is a link for iris dataset used in example below.
+
+## Allowed HTTPs requests
+    POST   :   To create or update resource 
+    GET    :   Get a resource or list of resources
+    DELETE :   To delete resource
+##Description Of Usual Server Responses
+
+- 200 `OK` - the request was successful (some API calls may return 201 instead).
+- 201 `Created` - the request was successful and a resource was created.
+- 204 `No Content` - the request was successful but there is no representation to return (i.e. the response is empty).
+- 400 `Bad Request` - the request could not be understood or was missing required parameters.
+- 401 `Unauthorized` - authentication failed or user doesn't have permissions for requested operation.
+- 403 `Forbidden` - access denied.
+- 404 `Not Found` - resource was not found
+- 405 `Method Not Allowed` - requested method is not supported for resource.
+
 
 ## List files from given datasource [/v2/list_uri.json{?uri,include_filter,exclude_files}]
 The call for given URI returns a list of files which are accessible.
@@ -39,16 +59,17 @@ Note: client can filter the list by itself.
             ]
         }
 
-## Post a file [/v2/post_file.json{?file,dst}]
+## Post a file [/v2/post_file.json{?dst,filename}]
 The call creates a new primitive value in H2O by uploading a file.
 Returns uri (i.e., H2O destination key) of given resource.
 
 ```
-curl --data-binary @iris.csv http://h2o/v2/post_file.json?dst=iris.csv
+curl --data-binary @iris.csv http://h2o/v2/post_file.json?filename=iris.csv
 ```
 
 + Parameters
-  + dst (string, required) ... destination key
+  + filename (string, required)  ... name of the file which is going to be uploaded
+  + dst (string, optional) ... destination key to save file under
 
 ### Post a given file [POST]
 + Response 200 (application/json)
