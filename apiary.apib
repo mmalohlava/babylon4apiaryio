@@ -21,7 +21,7 @@ Here is a link for iris dataset used in example below.
     POST   :   To create or update resource 
     GET    :   Get a resource or list of resources
     DELETE :   To delete resource
-##Description Of Usual Server Responses
+##Description Of Used Server Responses
 
 - 200 `OK` - the request was successful (some API calls may return 201 instead).
 - 201 `Created` - the request was successful and a resource was created.
@@ -32,6 +32,7 @@ Here is a link for iris dataset used in example below.
 - 404 `Not Found` - resource was not found
 - 405 `Method Not Allowed` - requested method is not supported for resource.
 
+---
 
 ## List files from given datasource [/v2/list_uri.json{?uri,include_filter,exclude_files}]
 The call for given URI returns a list of files which are accessible.
@@ -89,6 +90,16 @@ curl --data-binary @iris.csv http://h2o/v2/post_file.json?filename=iris.csv
 The call returns a guessed parser config. The client can explicitly enforce selected parameters/behavior.
 
 ```
+curl --data-binary\
+    '{ "parser_config" : {
+                "uris"         : [ "iris.csv" ],
+    }'\
+    http://mmalohlava.apiary.io/v2/parse_preview.json
+```
+
+The consequents calls should return modified parser configuration according to user' requests.
+
+```
     curl --data-binary\
     '{ "parser_config" : {
                 "uris"         : [ "iris.csv" ],
@@ -118,6 +129,7 @@ The call returns a guessed parser config. The client can explicitly enforce sele
                 "parser_type"   : "CSV",
                 "header_separator" : ",",
                 "data_separator"   : ",",
+                "header_file"      : "iris.csv"
             }
     }'\
     http://mmalohlava.apiary.io/v2/parse_preview.json?preview_len=10
@@ -125,7 +137,7 @@ The call returns a guessed parser config. The client can explicitly enforce sele
 ```
 
 + Parameters
-  + preview_len = `10` (integer,optional) ... length
+  + preview_len = `10` (integer,optional) ... length of requested preview
 
 
 ### Retrieve a parse preview [POST]
@@ -160,6 +172,7 @@ The call returns a guessed parser config. The client can explicitly enforce sele
                 "header_separator" : ",",
                 "data_separator"   : ",",
                 "skip_header"      : False,
+                "header_file"      : "iris.csv"
             },
             "preview_len"      : 10,
             "preview"          : [ 
@@ -203,6 +216,8 @@ curl --data-binary @iris.csv http://mmalohlava.apiary.io/v2/get_header.json
         }
 
 ## Parse [/v2/parse.json]
+First call should provide only empty `parser_config` and H2O will return the guessed parser configuration.
+I.e.,
 
 ```
     curl --data-binary\
