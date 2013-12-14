@@ -207,24 +207,14 @@ The consequents calls should return modified parser configuration according to u
 The call return a header stored in given file reflecting the separator.
 
 + Parameters
-  + uri (string,required) ... generic URI (i.e., key) containing a header
-  + header_separator (string,optional) ... separator separating header
+  + uri (string,required) ... key URI containing a header
+  + header_separator (string,optional) ... separator separating header. If the separator is not specified, it is guessed.
 
 ### Retrieve a header stored at given URI [GET]
 + Response 200 (application/json)
     
         { 
-            "header"           : [ "sepal_len","sepal_wid","petal_len","petal_wid","class" ],
-            "header_separator" : ","
-        }
-
-### Retrieve a header stored in given file [POST]
-```
-curl --data-binary @iris.csv http://mmalohlava.apiary.io/v2/get_header.json
-```
-+ Response 200 (application/json)
-        
-        { 
+            "uri"              : "iris.csv",
             "header"           : [ "sepal_len","sepal_wid","petal_len","petal_wid","class" ],
             "header_separator" : ","
         }
