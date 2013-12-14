@@ -143,11 +143,17 @@ The consequents calls should return modified parser configuration according to u
 ### Retrieve a parse preview [POST]
 + Request (application/json)
 
-        { 
-            "parser_config" : {
-                "uris"         : [ "iris.csv" ]
+    + Parameters
+        + parser_config (object) ... parser configuration object
+            + uris (list) ... list of strings
+        
+    + Body
+
+            { 
+                "parsera_config" : {
+                    "uris" : [ "iris.csv" ]
+                }
             }
-        }
 
 + Response 200 (application/json)
 
