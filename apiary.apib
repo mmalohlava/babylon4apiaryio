@@ -393,6 +393,33 @@ Retrieve a H2O resource as a Java program.
         class Iris {
         }
 
+## Jobs [/v2/jobs]
 
-        
-  
+### Retrieve all jobs [GET]
++ Response 200 (application/json)
+
+        {
+            "jobs": [
+            {
+                "name" : "job1",
+                "dst"  : "GBM_model",
+                "status" : "DONE",
+                "msg"  : null
+            },
+            "jobs": [
+            {
+                "name" : "job2",
+                "dst"  : "DRF_model",
+                "status" : "CRASHED",
+                "msg"  : "Assertion: to many trees"
+            }
+            ]
+        }
+
+## Frames [/v2/frames]
+
+## Models [/v2/models]
+
+
+
+
