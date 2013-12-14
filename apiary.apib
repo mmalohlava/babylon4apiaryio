@@ -141,6 +141,14 @@ The consequents calls should return modified parser configuration according to u
 
 
 ### Retrieve a parse preview [POST]
++ Request (application/json)
+
+        { 
+            "parser_config" : {
+                "uris"         : [ "iris.csv" ]
+            }
+        }
+
 + Response 200 (application/json)
 
         {
@@ -257,11 +265,51 @@ I.e.,
 
 
 ### Start a parse job [POST]
++ Request (application/json)
+
+        { "parser_config" : {
+                "uris"         : [ "iris.csv" ],
+                "columns"       : 
+                        [ 
+                        {
+                            
+                            "header" : "sepal_len",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "sepal_wid",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "petal_len",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "petal_wid",
+                            "type"   : "DOUBLE"
+                        },
+                        {
+                            "header" : "class",
+                            "type"   : "ENUM"
+                        }],
+                "parser_type"   : "CSV",
+                "header_separator" : ",",
+                "data_separator"   : ",",
+            }
+        }
+
 + Response 200 (application/json)
 
         {
             "dst" : "iris.hex",
             "job" : "$0301c0a8013132d4ffffffff$_b1aa57792163146ec3393de65f2b4a6a"
+        }
+        
++ Response 400 (application/json)
+    
+        {
+            "error_msg" : "Missing parameters in parser configuration!",
+            "error_code" : 0012
         }
         
 ## Monitor parse progress [/v2/parse_progress.json{?job}]
